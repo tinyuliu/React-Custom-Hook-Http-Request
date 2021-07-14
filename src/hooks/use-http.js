@@ -10,9 +10,9 @@ const useHttp = (requestConfig, applyData) => {
       try {
         const response = await fetch(
           requestConfig.url, {
-              method: requestConfig.method,
-              headers: requestConfig.headers,
-              body: JSON.stringify(requestConfig.body)
+              method: requestConfig.method ? requestConfig.method: 'GET',
+              headers: requestConfig.headers ? requestConfig.headers : {},
+              body: JSON.stringify(requestConfig.body) ? JSON.stringify(requestConfig.body): null
           }
         );
   
@@ -21,14 +21,6 @@ const useHttp = (requestConfig, applyData) => {
         }
   
         const data = await response.json();//limited to json data
-  
-        const loadedTasks = [];
-  
-        for (const taskKey in data) {
-          loadedTasks.push({ id: taskKey, text: data[taskKey].text });
-        }
-  
-        const data = await response.json();
         applyData(data);
       } catch (err) {
         setError(err.message || 'Something went wrong!');
